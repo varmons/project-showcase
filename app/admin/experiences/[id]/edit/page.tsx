@@ -3,11 +3,11 @@ import { notFound } from "next/navigation";
 import { ExperienceEditForm } from "./form";
 
 interface Props {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }
 
 export default async function EditExperiencePage({ params }: Props) {
-    const { id } = params;
+    const { id } = await params;
     const supabase = await createServerClient();
 
     const { data: experience, error } = await supabase

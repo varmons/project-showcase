@@ -3,11 +3,11 @@ import { notFound } from "next/navigation";
 import { SkillEditForm } from "./form";
 
 interface Props {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }
 
 export default async function EditSkillPage({ params }: Props) {
-    const { id } = params;
+    const { id } = await params;
     const supabase = await createServerClient();
 
     const { data: skill, error } = await supabase

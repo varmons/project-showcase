@@ -61,7 +61,10 @@ export default async function AboutPage() {
                 {/* About Section */}
                 <div className="space-y-6">
                     <h1 className="text-4xl font-bold tracking-tight">About Me</h1>
-                    <div className="prose prose-invert text-muted-foreground">
+                    <div className="prose dark:prose-invert max-w-none
+                        prose-p:text-foreground/80 prose-p:leading-relaxed
+                        prose-strong:text-foreground prose-strong:font-bold
+                        prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
                         <div
                             className="space-y-4"
                             dangerouslySetInnerHTML={{ __html: aboutContent }}

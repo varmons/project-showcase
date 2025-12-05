@@ -3,11 +3,11 @@ import { notFound } from "next/navigation";
 import { ProjectEditForm } from "./form";
 
 interface Props {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }
 
 export default async function EditProjectPage({ params }: Props) {
-    const { id } = params;
+    const { id } = await params;
     const supabase = await createServerClient();
 
     const { data: project, error } = await supabase

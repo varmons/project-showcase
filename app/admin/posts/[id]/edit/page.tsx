@@ -3,11 +3,11 @@ import { notFound } from "next/navigation";
 import { PostEditForm } from "./form";
 
 interface Props {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }
 
 export default async function EditPostPage({ params }: Props) {
-    const { id } = params;
+    const { id } = await params;
     const supabase = await createServerClient();
 
     const { data: post, error } = await supabase

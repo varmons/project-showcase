@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ interface DisplayProject {
     title: string;
     subtitle?: string | null;
     content?: string | null;
+    thumbnail_url?: string | null;
     tags?: string[] | { id: string; name: string }[];
 }
 
@@ -58,9 +60,21 @@ export function FeaturedProjects({ projects }: FeaturedProjectsProps) {
                     return (
                         <Card key={project.id} className="group hover:border-primary transition-colors duration-300">
                             <div className="aspect-video w-full bg-secondary/30 object-cover border-b-2 border-border group-hover:border-primary/50 transition-colors flex items-center justify-center relative overflow-hidden">
-                                {/* Scanline overlay for image placeholder */}
-                                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,18,18,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_2px,3px_100%] pointer-events-none" />
-                                <span className="text-muted-foreground font-mono text-xs uppercase tracking-widest">Image_Data_Missing</span>
+                                {project.thumbnail_url ? (
+                                    <Image
+                                        src={project.thumbnail_url}
+                                        alt={project.title}
+                                        fill
+                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    />
+                                ) : (
+                                    <>
+                                        {/* Scanline overlay for image placeholder */}
+                                        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,18,18,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_2px,3px_100%] pointer-events-none" />
+                                        <span className="text-muted-foreground font-mono text-xs uppercase tracking-widest">Image_Data_Missing</span>
+                                    </>
+                                )}
                             </div>
 
                             <CardHeader>

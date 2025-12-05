@@ -79,8 +79,121 @@ const config: Config = {
           "50%": { opacity: "0" },
         },
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: 'none',
+            color: 'hsl(var(--foreground) / 0.8)',
+            a: {
+              color: 'hsl(var(--primary))',
+              textDecoration: 'none',
+              '&:hover': {
+                textDecoration: 'underline',
+              },
+            },
+            strong: {
+              color: 'hsl(var(--foreground))',
+              fontWeight: '700',
+            },
+            h1: {
+              color: 'hsl(var(--foreground))',
+              fontWeight: '700',
+            },
+            h2: {
+              color: 'hsl(var(--foreground))',
+              fontWeight: '700',
+            },
+            h3: {
+              color: 'hsl(var(--foreground))',
+              fontWeight: '700',
+            },
+            h4: {
+              color: 'hsl(var(--foreground))',
+              fontWeight: '700',
+            },
+            h5: {
+              color: 'hsl(var(--foreground))',
+              fontWeight: '700',
+            },
+            h6: {
+              color: 'hsl(var(--foreground))',
+              fontWeight: '700',
+            },
+            code: {
+              color: 'hsl(var(--primary))',
+              backgroundColor: 'hsl(var(--secondary) / 0.5)',
+              borderRadius: '0.25rem',
+              padding: '0.25rem 0.5rem',
+              fontWeight: '500',
+            },
+            'code::before': {
+              content: '""',
+            },
+            'code::after': {
+              content: '""',
+            },
+            pre: {
+              backgroundColor: 'hsl(var(--secondary) / 0.3)',
+              border: '1px solid hsl(var(--border))',
+              color: 'hsl(var(--foreground))',
+            },
+            blockquote: {
+              borderLeftColor: 'hsl(var(--primary))',
+              color: 'hsl(var(--foreground) / 0.8)',
+              fontStyle: 'italic',
+            },
+            'ul > li::marker': {
+              color: 'hsl(var(--primary))',
+            },
+            'ol > li::marker': {
+              color: 'hsl(var(--primary))',
+            },
+          },
+        },
+        invert: {
+          css: {
+            color: 'hsl(var(--foreground) / 0.8)',
+            a: {
+              color: 'hsl(var(--primary))',
+            },
+            strong: {
+              color: 'hsl(var(--foreground))',
+            },
+            h1: {
+              color: 'hsl(var(--foreground))',
+            },
+            h2: {
+              color: 'hsl(var(--foreground))',
+            },
+            h3: {
+              color: 'hsl(var(--foreground))',
+            },
+            h4: {
+              color: 'hsl(var(--foreground))',
+            },
+            h5: {
+              color: 'hsl(var(--foreground))',
+            },
+            h6: {
+              color: 'hsl(var(--foreground))',
+            },
+            code: {
+              color: 'hsl(var(--primary))',
+              backgroundColor: 'hsl(var(--secondary) / 0.5)',
+            },
+            pre: {
+              backgroundColor: 'hsl(var(--secondary) / 0.3)',
+              border: '1px solid hsl(var(--border))',
+            },
+            blockquote: {
+              borderLeftColor: 'hsl(var(--primary))',
+              color: 'hsl(var(--foreground) / 0.8)',
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };
 export default config;

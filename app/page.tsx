@@ -51,6 +51,7 @@ export default async function Home() {
     title: project.title,
     subtitle: project.subtitle,
     content: project.content,
+    thumbnail_url: project.thumbnail_url,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tags: project.project_tags?.map((pt) => {

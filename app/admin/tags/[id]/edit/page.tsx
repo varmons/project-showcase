@@ -3,11 +3,11 @@ import { notFound } from "next/navigation";
 import { TagEditForm } from "./form";
 
 interface Props {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }
 
 export default async function EditTagPage({ params }: Props) {
-    const { id } = params;
+    const { id } = await params;
     const supabase = await createServerClient();
 
     const { data: tag, error } = await supabase

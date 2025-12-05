@@ -109,8 +109,10 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
       created_at,
       updated_at,
       category_id,
-      category:project_categories(id,name,slug),
-      tags:project_tags(tag:tags(id,name,slug)),
+      category:project_categories!projects_category_id_fkey(id,name,slug),
+      project_tags(
+        tags(id,name,slug)
+      ),
       media:project_media(id,project_id,type,url,alt_text,caption,display_order,created_at)
     `
         )
@@ -119,17 +121,33 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
         .single();
 
     if (error) {
-        if (error.code === "PGRST116") return null; // Not found
+        if (error.code === "PGRST116") {
+            console.error(`Project not found: ${slug}`);
+            return null; // Not found
+        }
         console.error("Error fetching project:", error);
         return null;
     }
 
-    return {
+    if (!data) {
+        console.error(`No data returned for slug: ${slug}`);
+        return null;
+    }
+
+    // Transform the data structure
+    const transformedData = {
         ...data,
-        category: (data.category as any)?.[0] || undefined,
-        tags: (data.tags?.map((pt: { tag: unknown }) => pt.tag) || []) as Tag[],
+        category: data.category || undefined,
+        tags: (data.project_tags || [])
+            .map((pt: any) => pt.tags)
+            .filter(Boolean) as Tag[],
         media: data.media || [],
     };
+
+    // Remove the project_tags field as we've transformed it
+    delete (transformedData as any).project_tags;
+
+    return transformedData as Project;
 }
 
 /**
