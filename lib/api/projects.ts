@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createSupabaseAnon } from "@supabase/supabase-js";
-import type { Project, ProjectQueryOptions, Tag } from "@/types";
+import type { Project, ProjectCategory, ProjectQueryOptions, Tag } from "@/types";
 
 /**
  * Fetches all published projects with optional filtering.
@@ -109,9 +109,17 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
       created_at,
       updated_at,
       category_id,
-      category:project_categories!projects_category_id_fkey(id,name,slug),
+      category:project_categories!projects_category_id_fkey(
+        id,
+        name,
+        slug,
+        description,
+        display_order,
+        created_at,
+        updated_at
+      ),
       project_tags(
-        tags(id,name,slug)
+        tags(id,name,slug,created_at)
       ),
       media:project_media(id,project_id,type,url,alt_text,caption,display_order,created_at)
     `
@@ -135,19 +143,45 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     }
 
     // Transform the data structure
-    const transformedData = {
-        ...data,
-        category: data.category || undefined,
-        tags: (data.project_tags || [])
-            .map((pt: any) => pt.tags)
-            .filter(Boolean) as Tag[],
-        media: data.media || [],
+    const {
+        project_tags = [],
+        category = [],
+        media = [],
+        ...projectFields
+    } = data as typeof data & {
+        project_tags?: { tags?: Tag }[];
+        category?: ProjectCategory[] | ProjectCategory | null;
+        media?: Project["media"];
     };
 
-    // Remove the project_tags field as we've transformed it
-    delete (transformedData as any).project_tags;
+    const categoryEntry = Array.isArray(category) ? category[0] : category;
 
-    return transformedData as Project;
+    const normalizedCategory: ProjectCategory | undefined = categoryEntry
+        ? {
+              id: categoryEntry.id,
+              name: categoryEntry.name,
+              slug: categoryEntry.slug,
+              description: categoryEntry.description ?? null,
+              display_order: categoryEntry.display_order ?? 0,
+              created_at: categoryEntry.created_at ?? projectFields.created_at,
+              updated_at: categoryEntry.updated_at ?? projectFields.updated_at,
+          }
+        : undefined;
+
+    const flattenedTags = (project_tags ?? []).flatMap((pt) => {
+        const tag = pt?.tags;
+        if (!tag) {
+            return [];
+        }
+        return Array.isArray(tag) ? tag : [tag];
+    }) as Tag[];
+
+    return {
+        ...projectFields,
+        category: normalizedCategory,
+        tags: flattenedTags,
+        media: media || [],
+    } as Project;
 }
 
 /**
